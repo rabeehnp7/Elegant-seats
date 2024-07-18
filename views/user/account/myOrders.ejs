@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant seats</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Elegant seats</title>
+    <link rel="icon" href="img/favicon.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- animate CSS -->
+    <link rel="stylesheet" href="/css/animate.css">
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="/css/all.css">
+    <!-- flaticon CSS -->
+    <link rel="stylesheet" href="/css/flaticon.css">
+    <link rel="stylesheet" href="/css/themify-icons.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+    <!-- swiper CSS -->
+    <link rel="stylesheet" href="/css/slick.css">
+   
+    <style>
+        /* Basic styling for the readonly box */
+        .readonly-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            max-width: 500px;
+            margin:0 100px;
+            background-color: #f9f9f9;
+        }
+            
+
+        /* Style for the user details */
+        .user-details {
+            font-weight: normal;
+        }
+
+        /* Add responsiveness for smaller screens */
+        @media (max-width: 768px) {
+            .readonly-box {
+                max-width: 90%;
+            }
+        }
+    </style>
+
+
+
+    
+</head>
+<body style="background-color: #f9f9f9">
+    <!-- Navbar -->
+    <%- include('../../partials/accountNav') -%>
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            <%- include('../../partials/accountSidebar') -%>
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+
+              <% if (success && success.length > 0) { %>
+                <div class="alert alert-success text-center" id="success-message">
+                  <% success.forEach(function(message) { %>
+                    <p><%= message %></p>
+                  <% }); %>
+                </div>
+                <script>
+                    setTimeout(function() {
+                      var successMessage = document.getElementById('success-message');
+                      if (successMessage) {
+                        successMessage.style.display = 'none';
+                      }
+                    }, 2000); 
+                  </script>
+              <% } %> 
+
+              
+            <% if (orders.length) { %>
+              <section style="background-color: #f9f9f9;">
+                <div class="container py-5">
+                  <div class="row justify-content-center mb-3">
+                   <% orders.forEach((order)=> { %>
+
+                    <div class="col-md-12 col-xl-10">
+                      <div class="card shadow-0 border rounded-3">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                              <h6>Order Id</h6>
+                              <p><%= order.orderId  %></p>
+                              <h6 class="text-truncate mb-4 mb-md-0">
+                                Ordered at:<p> <%= order.orderDate.toDateString()  %> </p>
+                              </h6>
+                            </div>
+                          
+                            <div class="col-md-6 col-lg-6 col-xl-6">
+                              <% order.products.product.forEach((prdt)=> { %>
+
+                                <p>• <%= prdt.name  %></p>
+ 
+                              <% }) %>
+                              <h6>payment Method :</h5>
+                              <span><p class="mb-1 me-1"> <%= order.paymentMethod  %></p></span>
+                           </div>
+                           
+                           <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                             <div class="d-flex flex-row align-items-center mb-1">
+                               <h5>Total :</h5>
+                               <span><h5 class="mb-1 me-1">$ <%= order.totalPrice  %></h5></span>
+                               <!-- <span class="text-danger"><s>$20.99</s></span> -->
+                             </div>
+                             <% if(order.status==='Cancelled'){  %>
+                              <p class="text-danger"><strong>Cancelled on: </strong><br><% if(order.cancelledOn){ %>   <%= order.cancelledOn.toDateString() %>  <% } %></p> 
+                                <% if(order.paymentMethod === 'Razorpay'){ %>
+                                  <% if(!order.refunded){ %>
+                                    <a class="btn btn-sm btn-outline-primary" href="/refund/<%= order._id %>">Refund</a>
+                                  <% }else{ %>
+                                    <p class="text-success">Refund claimed</p>
+                                  <% } %>
+                                <% } %>
+                             <% }else if(order.status === 'Delivered'){ %> 
+                              <p class="text-success"><strong>Delivered on: </strong><br><%if(order.deliveredOn){ %>  <%=order.deliveredOn.toDateString() %>   <%}%></p>
+                              <form action="/myOrders/invoice" method="post" novalidate="novalidate">
+                                <input type="hidden" name="orderId" value="<%= order.orderId %>">
+                                <button class="btn btn-outline-primary btn-sm mt-2"  type="submit">
+                                  download invoice
+                                </button>
+                              </form> 
+                             <% } else { %>
+                                 <h6 class="text-secondary"><%= order.status  %></h6>
+                                 <div class="d-flex flex-column mt-4">
+                                  <form action="/myOrders/orderDetails" method="post">
+                                    <input type="hidden" name="orderId" value="<%= order.orderId %>">
+                                    <button  class="btn btn-primary btn-sm" type="submit">Details</button>
+                                  </form> 
+                                  <form action="/myOrders/invoice" method="post" novalidate="novalidate">
+                                    <input type="hidden" name="orderId" value="<%= order.orderId %>">
+                                    <button class="btn btn-outline-primary btn-sm mt-2"  type="submit">
+                                      download invoice
+                                    </button>
+                                  </form>
+                                  <form action="/myOrders/cancel" method="post" novalidate="novalidate">
+                                    <input type="hidden" name="orderId" value="<%= order.orderId %>">
+                                    <button class="btn btn-outline-primary btn-sm mt-2" data-toggle="modal" data-target="#orderModal<%= order.orderId %>"  type="button">
+                                      cancel Order
+                                    </button>
+<!-- Modal -->
+<div class="modal fade" id="orderModal<%= order.orderId %>" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderModalLabel">Confirm Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure to cancel the Order?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="submit" class="btn btn-primary">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+                                  </form>
+                                </div>   
+                             <% } %>
+                              
+                             
+                           </div>
+                           
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                   <% }) %>
+                 </div>
+                
+               </div>
+             </section>
+
+             <% } else { %>
+
+              <h6><center>no orders</center></h6>
+
+            <% } %>
+                              
+                              
+                              
+                              
+
+
+
+
+            </main>
+        </div>
+    </div>
+
+<%- include('../../partials/accountFooter') -%>  
+
+
+

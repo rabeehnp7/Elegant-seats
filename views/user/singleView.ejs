@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zxx">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>aranoz</title>
+  <link rel="icon" href="/img/favicon.png">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <!-- animate CSS -->
+  <link rel="stylesheet" href="/css/animate.css">
+  <!-- owl carousel CSS -->
+  <link rel="stylesheet" href="/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/css/lightslider.min.css">
+  <!-- font awesome CSS -->
+  <link rel="stylesheet" href="/css/all.css">
+  <!-- flaticon CSS -->
+  <link rel="stylesheet" href="/css/flaticon.css">
+  <link rel="stylesheet" href="/css/themify-icons.css">
+  <!-- font awesome CSS -->
+  <link rel="stylesheet" href="/css/magnific-popup.css">
+  <!-- style CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!--link from cloud-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.css">
+  <style>
+  .success {
+    display: none;
+    position: fixed;
+    top: 50%; /* Center vertically at 50% of the viewport height */
+    left: 60%; /* Center horizontally at 50% of the viewport width */
+    transform: translate(-50%, -50%); /* Move the element back by half of its own width and height */
+    background-color: lightgray;
+    padding: 20px;
+    z-index: 100;
+  }
+</style>
+</head>
+
+<body>
+  <%- include('../partials/header') -%>
+
+  <!-- breadcrumb start-->
+  <!-- <section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="breadcrumb_iner">
+            <div class="breadcrumb_iner_item">
+              <h2>Shop Single</h2>
+              <p>Home <span>-</span> Shop Single</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+  <!-- breadcrumb start-->
+  <!--================End Home Banner Area =================-->
+
+  <!--================Single Product Area =================-->
+  <div class="product_image_area section_padding">
+    <div class="container">
+      <div class="row s_product_inner justify-content-between">
+
+        <div class="col-lg-7 col-xl-7">
+          <div class="product_slider_img">
+            <div id="vertical">
+            <% product.images.forEach( (image,index)=> { %>  
+               <div data-thumb="<%= image %>">
+                 <img src="<%= image %>" class="img-click zoom-image" />
+               </div>
+            <% }) %> 
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5 col-xl-4">
+          <div class="s_product_text">
+            <h3><%= product.name %></h3>
+            <% if(category.offer !== null && category.offer.status === 'Available' && category.offer.deleted === false){ %>
+              <h2 style="text-decoration: line-through;">&#8377;<%= product.price %></h2>
+              <h4 class="text-success"><%= category.offer.discount  %>% <%= category.offer.name %> offer on <%= category.name %></h4>
+              <h5 class="text-success"><%= product.categoryOfferPrice %>/- only</h5>
+            <% }else if(product.offerPrice !==0 && product.offer.status === 'Available' && product.offer.deleted === false ) { %>
+              <h2 style="text-decoration: line-through;">&#8377;<%= product.price %></h2>
+              <h4 class="text-success"><%= product.offer.discount  %>% <%= product.offer.name %> off</h4>
+              <h5 class="text-success"><%= product.offerPrice %>/- only</h5>
+            <% }else{ %>  
+               <h2><%= product.price %></h2>
+            <% } %>   
+            <ul class="list">
+              <li>
+                <a class="active" href="#">
+                  <span>Category</span> : <%= category.name %></a>
+              </li>
+              <li>
+                <a href="#"> <span>Availibility</span> : <%= product.stock %></a>
+              </li>
+            </ul>
+            <p>
+              <%= product.description %>
+            </p>
+            <% if(product.stock === 0) { %>
+              <h6 class="text-danger"> <center>Out of stock!</center></h6>
+            <% }else{ %>
+            
+               <div class="card_area d-flex justify-content-between align-items-center">
+                 
+                   <input  type="hidden" name="quantity" value="1">
+                   <button type="button" class="btn_3 addToCartButton">add to cart</button>
+                   <input type="hidden" class="productId" value="<%= product._id %>">
+                 
+                   <a href="/addTowishlist/<%= product._id %>" class="like_us"> <i class="ti-heart"></i> </a>
+               </div>
+          
+            <div class="card_area d-flex justify-content-between align-items-center">
+              <!-- <div class="product_count">
+                <span class="inumber-decrement"> <i class="ti-minus"></i></span>
+                <input class="input-number" type="text" value="1" min="0" max="10">
+                <span class="number-increment"> <i class="ti-plus"></i></span>
+              </div> -->
+              <!-- <a href="/buyNow/productid" class="btn_3">Buy now</a> -->
+              <div id="success-message" class="alert alert-success success"></div>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--================End Single Product Area =================-->
+
+  <!--================Product Description Area =================-->
+  
+  <!--================End Product Description Area =================-->
+
+  <!-- product_list part start-->
+  
+  <!-- product_list part end-->
+
+  <%- include('../partials/footer') -%>
+
+   <!--i given it in the public folder-->
+  <script src="/js/zoomImg.js"></script>
+    <script>
+        const images = document.querySelectorAll('.img-click')
+        images.forEach(img => {
+            img.addEventListener('click', () => zoomImg(img))
+        })
+  </script>
+  
+  <!--::footer_part end::-->
+
+  <!-- jquery plugins here-->
+  <!-- jquery -->
+  <script src="/js/jquery-1.12.1.min.js"></script>
+  <!-- popper js -->
+  <script src="/js/popper.min.js"></script>
+  <!-- bootstrap js -->
+  <script src="/js/bootstrap.min.js"></script>
+  <!-- easing js -->
+  <script src="/js/jquery.magnific-popup.js"></script>
+  <!-- swiper js -->
+  <script src="/js/lightslider.min.js"></script>
+  <!-- swiper js -->
+  <script src="/js/masonry.pkgd.js"></script>
+  <!-- particles js -->
+  <script src="/js/owl.carousel.min.js"></script>
+  <script src="/js/jquery.nice-select.min.js"></script>
+  <!-- slick js -->
+  <script src="/js/slick.min.js"></script>
+  <script src="/js/swiper.jquery.js"></script>
+  <script src="/js/jquery.counterup.min.js"></script>
+  <script src="/js/waypoints.min.js"></script>
+  <script src="/js/contact.js"></script>
+  <script src="/js/jquery.ajaxchimp.min.js"></script>
+  <script src="/js/jquery.form.js"></script>
+  <script src="/js/jquery.validate.min.js"></script>
+  <script src="/js/mail-script.js"></script>
+  <script src="/js/stellar.js"></script>
+  <!-- custom js -->
+  <script src="/js/theme.js"></script>
+  <script src="/js/custom.js"></script>
+
+  <!--cloud links-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+<script>
+    $(document).ready(function () {
+      $('.zoom-image').elevateZoom({
+        zoomType: "inner", // Change the zoom type as needed (inner, lens, window)
+        cursor: "crosshair", // Change the cursor style when hovering over the image
+      });
+
+
+$(".addToCartButton").click(function() {
+
+var productId = $(this).siblings(".productId").val();
+var scrollPosition = $(window).scrollTop();
+console.log(productId)
+$.ajax({
+    url:'/addToCart',
+    method:"POST",
+    data: {
+        productId:productId,
+        quantity:1
+    },
+    success: function(response,status,xhr){
+        if(response.success){
+            
+            window.scrollTo(0, scrollPosition);
+            displayFlashMessage(response.success)
+        }
+    },
+    error: function(xhr, stock, errorThrown) {
+            // Handle the AJAX error
+            if(xhr.status === 404){
+              alert('an error occured')
+            }
+    },
+            
+
+
+   })
+
+  });
+
+
+
+
+});
+
+
+function displayFlashMessage(message) {
+  const flashMessageElement = document.getElementById('success-message');
+  flashMessageElement.textContent = message;
+  flashMessageElement.style.display = 'block'; // Show the flash message
+  
+
+  setTimeout(() => {
+    flashMessageElement.style.display = 'none'; // Hide the flash message after 3 seconds (adjust as needed)
+  },1500);
+}
+
+</script>
+</body>
+</html>

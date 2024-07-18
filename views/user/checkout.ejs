@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="zxx">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>aranaz</title>
+  <link rel="icon" href="/img/favicon.png">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <!-- animate CSS -->
+  <link rel="stylesheet" href="/css/animate.css">
+  <!-- owl carousel CSS -->
+  <link rel="stylesheet" href="/css/owl.carousel.min.css">
+  <!-- nice select CSS -->
+  <link rel="stylesheet" href="/css/nice-select.css">
+  <!-- font awesome CSS -->
+  <link rel="stylesheet" href="/css/all.css">
+  <!-- flaticon CSS -->
+  <link rel="stylesheet" href="/css/flaticon.css">
+  <link rel="stylesheet" href="/css/themify-icons.css">
+  <!-- font awesome CSS -->
+  <link rel="stylesheet" href="/css/magnific-popup.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+  <!-- swiper CSS -->
+  <link rel="stylesheet" href="/css/slick.css">
+  <link rel="stylesheet" href="/css/price_rangs.css">
+  <!-- style CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+  <%- include('../partials/header') -%>
+
+
+
+
+    <!--================Checkout Area =================-->
+    <section class="checkout_area padding_top">
+      <div class="container">
+
+
+
+        <div class="billing_details">
+          <div class="row">
+            <div class="col-lg-8">
+              <h3>Billing Details</h3>
+
+
+
+              <% if (success && success.length > 0) { %>
+                <div class="alert alert-success text-center" id="success-message">
+                  <% success.forEach(function(message) { %>
+                    <p><%= message %></p>
+                  <% }); %>
+                </div>
+                <script>
+                    setTimeout(function() {
+                      var successMessage = document.getElementById('success-message');
+                      if (successMessage) {
+                        successMessage.style.display = 'none';
+                      }
+                    }, 2000); 
+                  </script>
+              <% } %> 
+
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Default Address</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <tr>
+                      <% if(defAddress){ %>
+                        <td>
+                          <span>
+                            <%= defAddress.phone %>
+                          </span><br>
+                          <span>
+                            <%= defAddress.address %>,<%= defAddress.landMark %>,<%= defAddress.locality %>,
+                                  <%= defAddress.district %> District,<%= defAddress.state %>,<%= defAddress.pincode %>.
+                          </span>
+                        </td>
+
+                        <% } else if(defAddress===null) { %>
+                          <td>
+                            <p>(add or set default address)</p>
+                            <a href="/profile/address"><i class="fas fa-plus">Add</i>
+                          </td>
+                          <% } %>
+                    </tr>
+
+
+                  </tbody>
+                </table>
+              </div>
+
+              
+
+
+
+
+              
+              
+                <div class="col-md-12 col-sm-12 form-group">
+                  <div class="creat_account">
+                    
+                  
+                    <label for="f-option3">Ship to a different address?</label>
+                  
+                    <form action="/profile/setDefaultAddress" method="post" id="setDefaultForm"> 
+                      <select class="form-select" aria-label="Default select example" id="selectAddress">
+                        <option selected>Choose an address</option>
+                        <% addresses.forEach(function(address, index) { %>
+                          <option value="<%= address._id %>">
+                            <span><%= address.phone %></span><br>
+                            <span><%= address.address %>, <%= address.landMark %>, <%= address.locality %>,
+                              <%= address.district %> District, <%= address.state %>, <%= address.pincode %>.
+                            </span>
+                          </option>
+                        <% }) %>
+                      </select>
+                      <input type="hidden" name="checkoutId" id="addresId">
+                    </form>
+                    
+                     
+                    
+                    
+                  
+                   
+                    <p><a href="/profile/addAddress"><i class="fas fa-plus">Add New</i></a></p>
+                    
+                  </div>
+                </div>
+
+                  
+
+                
+                
+
+
+                
+                  <div class="cupon_area hidedAfterapply col-md-12 col-sm-12">
+                    <div class="check_title">
+                      <h2>
+                        Have a coupon?
+                        <!-- <a href="#">Click here to enter your code</a> -->
+                      </h2>
+                    </div>
+                   
+                    <input type="hidden" id="orderTotal" value="<%= user.totalCartAmount %>">
+                    <input type="text" id="couponCodeInput" placeholder="Enter coupon code" />
+                    <button class="tp_btn apply-coupon-btn">Apply Coupon</button>
+                    
+                  </div>
+                  <div id="flash-message" class="alert alert-danger col-md-12" style="display:none;"></div>
+
+
+                <% if(coupons.length){ %>
+                  <div class="card hidedAfterapply col-md-4 col-sm-4">
+                    <h6>Available Coupons</h6><br>
+                    <ul class="list-group list-group-light">
+
+                    <% coupons.forEach((coupon, index) => { %>
+                      
+                        <li class="list-group-item px-0">
+                            <fieldset>
+                                <input type="text" id="textToCopy<%= index %>" style="display: none;" value="<%= coupon.code %>"><%= coupon.code %>
+                                <button class="btn btn-link copy-button" data-copy-target="textToCopy<%= index %>"
+                                    data-message-target="message<%= index %>">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                                <div class="message" id="message<%= index %>"></div><br>
+                                <p><%= coupon.description %></p>
+                            </fieldset>
+                        </li>
+                    <% }) %>
+                          
+                    </ul>
+                  </div>
+
+                <% } %>
+                 
+
+                
+                 
+
+
+
+
+
+          </div>
+          
+          
+          <div class="col-lg-4 col-md-12">
+            <div class="order_box">
+              <h2>Your Order</h2>
+
+              <ul class="list">
+
+                <li>
+                  <a href="#">Product
+                    <span>Total</span>
+                  </a>
+                </li>
+                <% if(singleproduct){ %>
+                  <li>
+                    <a href="#">
+                      <%= singleproduct.name %>
+                        <span class="middle">x 1</span>
+                        <span class="last">&#8377; <%= singleproduct.price %></span>
+                    </a>
+                  </li>
+                <% }else{ %>  
+
+                 <%user.cart.forEach((item,index)=>{ %>
+                  <li>
+                    <a href="#">
+                      <%= item.product.name %>
+                        <span class="middle">x <%=item.quantity %></span>
+                        <span class="last">&#8377; <%=item.total %></span>
+                    </a>
+                  </li>
+                  <%})%>
+
+                <% } %>
+              </ul>
+
+              <ul class="list list_2">
+                
+
+                <li>
+                  <a href="#">Subtotal
+                    <% if(singleproduct){ %>
+                      <span>&#8377;<%= singleproduct.price %></span>
+                    <% }else{ %>  
+                      <span>&#8377;<%= user.totalCartAmount %></span>
+                    <% } %>  
+                  </a>
+                </li>
+                <li>
+                  <a href="#">Shipping
+                    <span>Free</span>
+                  </a>
+                </li>
+                <!-- <li>
+                  <a href="#">Discount
+                    <span id="discountAmount">0</span>
+                  </a>
+                </li> -->
+                <li>
+                  <a href="#">Total
+                    <% if(singleproduct){ %>
+                      <span>&#8377;<%= singleproduct.price %></span>
+                    <% }else{ %>  
+                      <span>&#8377;<%= user.totalCartAmount %></span>
+                    <% } %>
+                  </a>
+                </li>
+
+              </ul>
+
+
+
+              
+              
+              
+
+            
+              
+
+        <form id="orderForm" class="row contact_form" action="/checkout" method="post" novalidate="novalidate">
+
+
+            
+            <ul class="bg-white coupon-success col-md-12 col-sm-12">
+                
+              <p class="text-success">Coupon applied successfully!</p>
+              <li>
+                <input type="hidden" class="discountAmount" name="discount" value="">
+                <p>Discount <span class="discountAmount">0</span> </p>
+              </li>
+              <li>
+                <p>Total Amount
+                  <% if(singleproduct){ %>
+                    <span>&#8377;<%= singleproduct.price %></span>
+                  <% }else{ %>  
+                    <span class="TOTALamount">&#8377;<%= user.totalCartAmount %></span>
+                    <input type="hidden" class="TOTALamount" name="discountTotal" value="">
+                  <% } %>
+                  </p>
+              </li>
+              <button type="button" class="btn btn-sm btn-outline-secondary cancel-coupon-btn">Cancel</button>
+               
+            </ul>
+              
+            
+                
+              
+
+
+            <div class="payment_item col-md-12 col-sm-12">
+              <div class="radion_btn">
+                 <input type="radio" id="f-option5" name="paymentOptions" value="cod" />
+                 <label for="f-option5">Cash on Delivery</label>
+                 <div class="check"></div>
+              </div>
+            </div> 
+                 
+                 
+                 
+               <div class="payment_item active col-md-12 col-sm-12">
+                  <div class="radion_btn">
+                     <input type="radio" id="f-option6" name="paymentOptions" value="razorpay"/>
+                     <label for="f-option6">Razorpay</label>
+                     <div class="check"></div>
+                  </div>
+               </div>
+
+               <div class="payment_item active col-md-12 col-sm-12">
+                <div class="radion_btn">
+                   <input type="radio" id="f-option7" name="paymentOptions" value="wallet"/>
+                   <label for="f-option7">Wallet</label>
+                   <p class="text-success">current Bal: <%= user.wallet %>/-</p>
+                   <div class="check"></div>
+                </div>
+              </div>
+
+
+               <% if (error && error.length > 0) { %>
+                <div class="alert alert-danger text-center" id="error-message">
+                  <% error.forEach(function(message) { %>
+                    <p><%= message %></p>
+                  <% }); %>
+                </div>
+                <script>
+                    setTimeout(function() {
+                      var successMessage = document.getElementById('error-message');
+                      if (successMessage) {
+                        successMessage.style.display = 'none';
+                      }
+                    }, 2000); 
+                  </script>
+              <% } %> 
+                    <!-- <div class="creat_account">
+              <input type="checkbox" id="f-option4" name="selector" />
+              <label for="f-option4">I’ve read and accept the </label>
+              <a href="#">terms & conditions*</a>
+            </div> --><% if(singleproduct){ %>
+                         <button class="btn_3" data-toggle="modal" data-target="#orderModal" type="button">Place
+                            Order</button>
+                      <% }else{ %>
+                         <button class="btn_3" data-toggle="modal" data-target="#orderModal" type="button">Proceed to
+                           Order</button>
+                      <% } %>     
+
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="orderModal" tabindex="-1" role="dialog"
+                      aria-labelledby="orderModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="orderModalLabel">Confirm Order</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure you want to place your order?
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+
+                            <% if(singleproduct){ %>
+                              <button type="button" class="btn_1"
+                                onclick="return window.location.href='/'">yes</button>
+
+                            <% }else{ %>  
+                              <button type="submit" class="btn_1">Place Order</button>
+                            <% } %>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+            
+                  </form>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--================End Checkout Area =================-->
+
+
+  <hr>
+
+
+
+    <!-- jquery plugins here-->
+    <!-- jquery -->
+    <script src="/js/jquery-1.12.1.min.js"></script>
+    <!-- popper js -->
+    <script src="/js/popper.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- easing js -->
+    <script src="/js/jquery.magnific-popup.js"></script>
+    <!-- swiper js -->
+    <script src="/js/swiper.min.js"></script>
+    <!-- swiper js -->
+    <script src="/js/masonry.pkgd.js"></script>
+    <!-- particles js -->
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.nice-select.min.js"></script>
+    <!-- slick js -->
+    <script src="/js/slick.min.js"></script>
+    <script src="/js/jquery.counterup.min.js"></script>
+    <script src="/js/waypoints.min.js"></script>
+    <script src="/js/contact.js"></script>
+    <script src="/js/jquery.ajaxchimp.min.js"></script>
+    <script src="/js/jquery.form.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/mail-script.js"></script>
+    <script src="/js/stellar.js"></script>
+    <script src="/js/price_rangs.js"></script>
+    <!-- custom js -->
+    <script src="/js/custom.js"></script>
+
+    
+      
+    
+<script>
+  $(document).ready(function() {
+      $(".coupon-success").hide();
+     
+    
+    const couponCodeInput = $("#couponCodeInput"); // Select the input element by its ID
+    const orderTotalInput = $("#orderTotal"); // Select the input element by its ID
+    const applyCouponButton = $(".apply-coupon-btn");
+    const hidedDiv= $(".hidedAfterapply")
+    const cancelCouponButton = $(".cancel-coupon-btn");
+    const discountAmount= $("#discountAmount")
+    
+    applyCouponButton.on('click', function() {
+        const couponCode = couponCodeInput.val(); // Get the value from the input field
+        const orderTotal = parseFloat(orderTotalInput.val()); // Parse the value as a float
+        
+        
+        validateCoupon(couponCode, orderTotal);
+        
+    });
+
+
+    function hideCouponArea(){
+      hidedDiv.hide()
+      $(".coupon-success").show();
+    }
+    // Function to hide the success message and cancel button
+    function showCouponArea() {
+        hidedDiv.show()
+        $(".coupon-success").hide();
+    }
+
+   
+    // Function to handle cancel button click
+    cancelCouponButton.on('click', function() {
+       showCouponArea()
+    });
+
+
+   
+
+
+    function validateCoupon(couponCode, orderTotal) {
+        $.ajax({
+            url: "/validate-coupon", // Replace with your server-side route
+            method: "POST", // or 'PUT' depending on your API
+            data: JSON.stringify({
+                couponCode: couponCode,
+                orderTotal: orderTotal,
+            }),
+            contentType: "application/json", // Set the content type for JSON data
+
+            success: function(response, status, xhr) {
+                 if (response.invalidCoupon) {
+                    displayFlashMessage(response.error)
+                 } else if (response.usageLimit) {
+                  displayFlashMessage(response.error)
+                 } else if (response.criteriaFailure) {
+                  displayFlashMessage(response.error)
+                 
+                 }else if (response.validCoupon) {
+
+                   hideCouponArea()
+                   $(".discountAmount").text(response.discount + "/-");
+                   $(".discountAmount").val(response.discount);
+                   $(".TOTALamount").text(response.orderTotal + "/-");
+                   $(".TOTALamount").val(response.orderTotal);
+                   
+                   
+                   
+                      
+                   
+                  }else {
+                      alert('Unknown response from server');
+                  }
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', status, error);
+                    displayFlashMessage('invalid Coupon')
+                }
+            });
+        }
+
+
+
+        $('#selectAddress').on('change', function() {
+          const selectedAddressId = $(this).val();
+          console.log(selectedAddressId)
+          $('#addresId').val(selectedAddressId)
+          $('#setDefaultForm').submit();
+        })
+
+    });
+        
+    
+  function displayFlashMessage(message) {
+  const flashMessageElement = document.getElementById('flash-message');
+  flashMessageElement.textContent = message;
+  flashMessageElement.style.display = 'block'; // Show the flash message
+
+   setTimeout(() => {
+    flashMessageElement.style.display = 'none'; // Hide the flash message after 3 seconds (adjust as needed)
+   },2000);
+  }
+                 
+</script>
+<script>
+
+
+      
+
+      
+      document.addEventListener('DOMContentLoaded', function () {
+        const copyButtons = document.querySelectorAll('.copy-button');
+        copyButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-copy-target');
+                const textToCopy = document.getElementById(targetId);
+
+                textToCopy.select();
+                textToCopy.setSelectionRange(0, 99999); // For mobile devices
+
+                try {
+                    navigator.clipboard.writeText(textToCopy.value);
+                    const message = document.getElementById(this.getAttribute('data-message-target'));
+                    message.textContent = 'Coupon code copied to clipboard!';
+                } catch (err) {
+                    console.error(err);
+                    // Handle the error
+                }
+
+                window.getSelection().removeAllRanges();
+            });
+        });
+    });
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

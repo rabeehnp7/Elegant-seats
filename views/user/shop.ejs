@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="zxx">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Elegant seats</title>
+    <link rel="icon" href="img/favicon.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- animate CSS -->
+    <link rel="stylesheet" href="css/animate.css">
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <!-- nice select CSS -->
+    <link rel="stylesheet" href="css/nice-select.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="css/all.css">
+    <!-- flaticon CSS -->
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/themify-icons.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <!-- swiper CSS -->
+    <link rel="stylesheet" href="css/slick.css">
+    <link rel="stylesheet" href="css/price_rangs.css">
+    <!-- style CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+<style>
+.success {
+    display: none;
+    position: fixed;
+    top: 50%; /* Center vertically at 50% of the viewport height */
+    left: 60%; /* Center horizontally at 50% of the viewport width */
+    transform: translate(-50%, -50%); /* Move the element back by half of its own width and height */
+    background-color: lightgray;
+    padding: 20px;
+    z-index: 100;
+}
+</style>
+</head>
+
+<body>
+    <%- include('../partials/header') -%>
+
+
+
+    <!--================Home Banner Area =================-->
+    <!-- breadcrumb start-->
+    <!-- <section class="breadcrumb breadcrumb_bg">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="breadcrumb_iner">
+                        <div class="breadcrumb_iner_item">
+                            <h2>Explore Shop</h2>
+                            <p>Home <span>-</span>Explore Shop</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+    <!-- breadcrumb start-->
+
+    <!--================Category Product Area =================-->
+    <section class="cat_product_area section_padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="left_sidebar_area">
+                        <a href="/shop" class="btn btn-outline-secondary">clear filters</a>
+                        <aside class="left_widgets p_filter_widgets">
+                            <div class="l_w_title">
+                                <h3>Browse Categories</h3>
+                            </div>
+                            <div class="widgets_inner">
+                                <ul class="list">
+                                    <% categories.forEach((cat, index)=> { %>
+                                    <li>
+                                        <a href="/shop?category=<%= cat.name %>"> <%= cat.name %> </a>
+                                        <span><img src="<%= cat.image  %>"
+                                            alt="Generic placeholder image" class="img-fluid rounded-circle border border-dark border-3"
+                                            style="width: 40px;"></span>
+                                    </li>
+                                    <% }) %>
+                                </ul>
+                            </div>
+                        </aside>
+
+                        <aside class="left_widgets p_filter_widgets price_rangs_aside">
+                            <div class="l_w_title">
+                                <h3>Price Filter</h3>
+                            </div>
+                            <div class="widgets_inner">
+                                <div class="range_item">
+                                    <input type="text" class="js-range-slider" value="" />
+                                    <div class="d-flex">
+                                        <div class="price_text">
+                                            <p>Price :</p>
+                                        </div>
+                                        <div class="price_value d-flex justify-content-center">
+                                            <input type="text" class="js-input-from" id="amount-from"  />
+                                            <span>to</span>
+                                            <input type="text" class="js-input-to" id="amount-to"  />
+                                        </div>
+                                    </div>
+                                    <a href="#" class="btn" style="background-color:#8dd5df" id="apply-button">apply</a>
+                                </div>
+                            </div>
+                        </aside>
+                        
+                                        
+
+                        
+                       
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <% if (error && error.length > 0) { %>
+                                <div class="alert alert-danger text-center" id="error-message">
+                                  <% error.forEach(function(message) { %>
+                                    <p><%= message %></p>
+                                  <% }); %>
+                                </div>
+                                <script>
+                                    setTimeout(function() {
+                                      var errorMessage = document.getElementById('error-message');
+                                      if (errorMessage) {
+                                        errorMessage.style.display = 'none';
+                                      }
+                                    }, 2000); 
+                                  </script>
+                              <% }else{ %>
+                                <div id="success-message" class="alert alert-success success"></div>  
+                            <% } %>  
+   
+
+                            <div class="product_top_bar d-flex justify-content-between align-items-center">
+                                <div class="single_product_menu">
+                                    <p><span><%= totalItems %> </span> Products Found</p>
+                                </div>
+                                <div class="single_product_menu d-flex">
+                                    <span><h5><b>filtered by :</b>
+                                    <%= filterName %></h5></span>
+                                </div>
+                                <div class="single_product_menu d-flex">
+                                    <h5>show :</h5>
+                                    <div class="top_pageniation">
+                                        <ul>
+                                            <li>1</li>
+                                            <li>2</li>
+                                            <li>3</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                           </div>
+                       </div>
+                                                
+                    </div>
+
+
+                    
+                        <div class="row align-items-center latest_product_inner">
+                            <% products.forEach(function(product, index) { %>
+                                
+                                <div class="col-lg-4 col-sm-6">
+                                    <div class="single_product_item">
+                                        <a href="/product/<%= product._id %>">
+                                            <img src="<%= product.images[0] %>" alt="<%= product.name %>">
+                                        </a>
+                                        <% if(product.stock === 0) { %>
+                                            <div class="single_product_text">
+                                                <h4><%= product.name %></h4>
+                                                <h3>&#8377;<%= product.price %></h3>
+                                                <a href="/addTowishlist/<%= product._id %>" class="add_cart text-muted">Out of stock!</a>
+                                                <a href="/addTowishlist/<%= product._id %>"><i class="ti-heart"></i></a>
+                                            </div>
+                                            <% }else{ %>
+                                            <div class="single_product_text">
+                                                <% if(product.category.offer.length && product.category.offer[0].status === 'Available' && product.category.offer[0].deleted === false){ %>
+                                                    <h4><%= product.name %></h4>
+                                                    <h3 style="text-decoration: line-through; color: #999;">&#8377;<%= product.price %></h3>
+                                                    <h4 class="text-success">&#8377;<%= product.categoryOfferPrice %>/- only</h4>
+                                                    <h5 class="text-success"><%= product.category.offer[0].discount  %>% <%= product.category.offer[0].name %> offer on <%= product.category.name %></h5>
+                                                <% }else if(product.offerPrice !==0 && product.offer[0].status === 'Available' && product.offer[0].deleted === false) { %>
+                                                    <h4><%= product.name %></h4>
+                                                    <h3 style="text-decoration: line-through; color: #999;">&#8377;<%= product.price %></h3>
+                                                    <h4 class="text-success">&#8377;<%= product.offerPrice %>/- only</h4>
+                                                    <h5 class="text-success"><%= product.offer[0].discount  %>% <%= product.offer[0].name %> off</h5>
+                                                <% }else{ %>
+                                                    <h4><%= product.name %></h4>
+                                                    <h3>&#8377;<%= product.price %></h3>
+                                                <% } %>
+                                                <a class="add_cart addToCartButton" style="cursor: pointer;">+ Add to Cart</a>
+                                                <input type="hidden" class="productId" value="<%= product._id %>">
+                                                <a href="/addTowishlist/<%= product._id %>"><i class="ti-heart"></i></a>
+                                            </div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                <% }); %>
+
+
+                                            
+                                                
+                                            
+                                            
+
+                                            
+
+                                
+    
+    
+    
+                        <div class="pageination">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+                                    
+                                    
+                                    
+                                    <% for (let page = 1; page <= totalPages; page++) { %>
+                                        <li class="page-item">
+                                            <form action="/shop" method="post">
+                                                <input type="hidden" name="pageNumber" value="<%= page-1 %>">
+                                                <button class="page-link" type="submit"><%= page  %></button>
+                                            </form>
+                                        </li>
+                                    <% } %>
+                                    
+                                    
+                                        
+                                        
+
+                        
+                                </ul>
+                            </nav>
+                        </div>
+                    
+                        
+                </div>
+            </div>
+        </div>
+        
+
+
+      </div>
+     </div>
+   </div>
+ </div>
+</section>
+<!--================End Category Product Area =================-->
+                    
+<!-- product_list part start-->
+<section class="product_list best_seller section_padding">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="section_tittle text-center">
+                    <h2>Best Sellers <span>shop</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center justify-content-between">
+            <div class="col-lg-12">
+                <div class="best_product_slider owl-carousel">
+                    <% products.forEach((prdt)=> { %>
+                    <% if (!prdt.softDeleted) { %>
+                    <div class="single_product_item">
+                        <a href="/product/<%= prdt._id %>">
+                            <img src="<%= prdt.images[0] %>" alt="">
+                        </a>
+                        <div class="single_product_text">
+                            <h4><%= prdt.name %></h4>
+                            <h3>&#8377;<%= prdt.price %></h3>
+                        </div>
+                    </div>
+                    <% } %>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- product_list part end-->
+
+    <%- include('../partials/footer') -%>
+
+     <!-- jquery plugins here-->
+     <script src="js/jquery-1.12.1.min.js"></script>
+     <!-- popper js -->
+     <script src="js/popper.min.js"></script>
+     <!-- bootstrap js -->
+     <script src="js/bootstrap.min.js"></script>
+     <!-- easing js -->
+     <script src="js/jquery.magnific-popup.js"></script>
+     <!-- swiper js -->
+     <script src="js/swiper.min.js"></script>
+     <!-- swiper js -->
+     <script src="js/masonry.pkgd.js"></script>
+     <!-- particles js -->
+     <script src="js/owl.carousel.min.js"></script>
+     <script src="js/jquery.nice-select.min.js"></script>
+     <!-- slick js -->
+     <script src="js/slick.min.js"></script>
+     <script src="js/jquery.counterup.min.js"></script>
+     <script src="js/waypoints.min.js"></script>
+     <script src="js/contact.js"></script>
+     <script src="js/jquery.ajaxchimp.min.js"></script>
+     <script src="js/jquery.form.js"></script>
+     <script src="js/jquery.validate.min.js"></script>
+     <script src="js/mail-script.js"></script>
+     <script src="js/stellar.js"></script>
+     <script src="js/price_rangs.js"></script>
+     <!-- custom js -->
+     <script src="js/custom.js"></script>
+
+     
+<!--for the price filter-->   
+<script>
+$(document).ready(function () {
+    $("#apply-button").click(function (e) {
+        e.preventDefault(); // Prevent the default behavior of the anchor tag
+
+        // Get the input values
+        const minPrice = $("#amount-from").val();
+        const maxPrice = $("#amount-to").val();
+
+        // Construct the URL with query parameters
+        const url = `/shop?min=${minPrice}&max=${maxPrice}`;
+
+        // Redirect the user to the new URL
+        window.location.href = url;
+    });
+
+
+
+
+    
+    
+    
+   
+    
+    $(".addToCartButton").click(function() {
+
+        var productId = $(this).siblings(".productId").val();
+        var scrollPosition = $(window).scrollTop();
+       console.log(productId)
+        $.ajax({
+            url:'/addToCart',
+            method:"POST",
+            data: {
+                productId:productId,
+                quantity:1
+            },
+            success: function(response,status,xhr){
+                if(response.success){
+                    
+                    window.scrollTo(0, scrollPosition);
+                    displayFlashMessage(response.success)
+                    
+                }
+            },
+            error: function(xhr, stock, errorThrown) {
+                    // Handle the AJAX error
+                    if(xhr.status === 404){
+                      alert('an error occured')
+                    }
+            },
+                    
+
+
+         })
+     
+    });
+
+
+
+
+});
+
+
+function displayFlashMessage(message) {
+  const flashMessageElement = document.getElementById('success-message');
+  flashMessageElement.textContent = message;
+  flashMessageElement.style.display = 'block'; // Show the flash message
+  
+
+  setTimeout(() => {
+    flashMessageElement.style.display = 'none'; // Hide the flash message after 3 seconds (adjust as needed)
+  },1500);
+}
+
+
+
+
+</script>
+
+
+ </body>
+ </html>      
+ 
+
+
+
+
+
+
+
+
+
+
+                    
+                                
+
+                        
+                                
+
